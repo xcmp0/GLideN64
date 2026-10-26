@@ -32,7 +32,7 @@ LRESULT CBitmapPicture::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
 
 bool CBitmapPicture::SetIcon(LPCWSTR lpszResourceName, uint32_t nWidth, uint32_t nHeight)
 {
-	CIcon hIcon = (HICON)::LoadImage(ModuleHelper::GetResourceInstance(), lpszResourceName > 0 ? MAKEINTRESOURCE(lpszResourceName) : lpszResourceName, IMAGE_ICON, nWidth, nHeight, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
+	CIcon hIcon = (HICON)::LoadImage(ModuleHelper::GetResourceInstance(), lpszResourceName, IMAGE_ICON, nWidth, nHeight, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
 	if (hIcon.IsNull())
 	{
 		return false;
