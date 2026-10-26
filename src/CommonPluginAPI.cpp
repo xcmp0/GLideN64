@@ -8,7 +8,7 @@
 
 extern "C" {
 
-EXPORT BOOL CALL InitiateGFX (GFX_INFO Gfx_Info)
+EXPORT int CALL InitiateGFX (GFX_INFO Gfx_Info)
 {
 	return api().InitiateGFX(Gfx_Info);
 }

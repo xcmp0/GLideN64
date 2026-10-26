@@ -21,8 +21,10 @@
 
 #ifdef MUPENPLUSAPI
 #include <mupenplus/GLideN64_mupenplus.h>
-#else
+#elif defined(OS_WINDOWS)
 #include <Graphics/OpenGLContext/windows/WindowsWGL.h>
+#else
+#include <Graphics/OpenGLContext/egl/EglContext.h>
 #endif
 
 namespace opengl {
