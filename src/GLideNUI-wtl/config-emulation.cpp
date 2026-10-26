@@ -1,6 +1,7 @@
 #include "config-emulation.h"
 #include "util/util.h"
 #include "../Config.h"
+#include "../ZilmarSettings.h"
 #include "resource.h"
 #include "ConfigDlg.h"
 
@@ -68,6 +69,7 @@ void CEmulationTab::OnPerGameSettings(UINT /*Code*/, int /*id*/, HWND /*ctl*/)
 void CEmulationTab::ApplyLanguage(void)
 {
 	SetDlgItemTextW(IDC_CHK_USE_PER_GAME, wGS(EMULATION_USE_PER_GAME).c_str());
+	SetDlgItemTextW(IDC_CHK_RSP_HLE_GFX, wGS(EMULATION_RSP_HLE_GFX).c_str());
 	SetDlgItemTextW(IDC_CHK_N64_STYLE_MIP_MAPPING, wGS(EMULATION_N64_STYLE_MIP_MAPPING).c_str());
 	SetDlgItemTextW(IDC_CHK_HWLIGHTING, wGS(EMULATION_HWLIGHTING).c_str());
 	SetDlgItemTextW(IDC_CHK_PIXEL_COVERAGE, wGS(EMULATION_PIXEL_COVERAGE).c_str());
@@ -92,6 +94,8 @@ void CEmulationTab::ApplyLanguage(void)
 
 	std::wstring tooltip = wGS(EMULATION_USE_PER_GAME_TOOLTIP);
 	TTSetTxt(GetDlgItem(IDC_CHK_USE_PER_GAME), tooltip.c_str());
+	tooltip = wGS(EMULATION_RSP_HLE_GFX_TOOLTIP);
+	TTSetTxt(GetDlgItem(IDC_CHK_RSP_HLE_GFX), tooltip.c_str());
 	tooltip = wGS(EMULATION_N64_STYLE_MIP_MAPPING_TOOLTIP);
 	TTSetTxt(GetDlgItem(IDC_CHK_N64_STYLE_MIP_MAPPING), tooltip.c_str());
 	tooltip = wGS(EMULATION_HWLIGHTING_TOOLTIP);
@@ -165,6 +169,11 @@ void CEmulationTab::LoadSettings(bool blockCustomSettings)
 	CButton(GetDlgItem(IDC_FACTORXX_RADIO)).SetCheck(config.frameBufferEmulation.nativeResFactor > 1 ? BST_CHECKED : BST_UNCHECKED);
 	m_N64ResMultiplerSpin.SetPos(config.frameBufferEmulation.nativeResFactor > 1 ? config.frameBufferEmulation.nativeResFactor : 2);
 	m_N64ResMultiplerTxt.SetWindowText(FormatStrW(L"%dx", m_N64ResMultiplerSpin.GetPos()).c_str());
+
+	u32 hleGfx = 1;
+	const bool rspGfx = getEmulatorSetting(RspGfxSetting(), hleGfx);
+	CButton(GetDlgItem(IDC_CHK_RSP_HLE_GFX)).SetCheck(hleGfx != 0 ? BST_CHECKED : BST_UNCHECKED);
+	GetDlgItem(IDC_CHK_RSP_HLE_GFX).EnableWindow(rspGfx);
 }
 
 void CEmulationTab::SaveSettings()
@@ -186,6 +195,8 @@ void CEmulationTab::SaveSettings()
 	config.gammaCorrection.level = ((float)m_GammaSpin.GetPos()) / 10;
 	config.graphics2D.enableNativeResTexrects = CComboBox(GetDlgItem(IDC_CMB_NATIVE_RES_2D)).GetCurSel();
 	config.texture.enableHalosRemoval = CButton(GetDlgItem(IDC_CHK_HALOS_REMOVAL)).GetCheck() == BST_CHECKED ? 1 : 0;
+	if (GetDlgItem(IDC_CHK_RSP_HLE_GFX).IsWindowEnabled())
+		setEmulatorSetting(RspGfxSetting(), CButton(GetDlgItem(IDC_CHK_RSP_HLE_GFX)).GetCheck() == BST_CHECKED ? 1 : 0);
 
 	if (CButton(GetDlgItem(IDC_FIXTEXRECT_NEVER)).GetCheck() == BST_CHECKED) {
 		config.graphics2D.correctTexrectCoords = Config::tcDisable;
@@ -200,6 +211,16 @@ void CEmulationTab::SaveSettings()
 	} else if (CButton(GetDlgItem(IDC_BGMODE_STRIPPED)).GetCheck() == BST_CHECKED) {
 		config.graphics2D.bgMode = Config::BGMode::bgStripped;
 	}
+}
+
+// Project64's setting for the graphics mode of the RSP plugin: the game's
+// while settings are saved for the running game, otherwise the one for all
+// games
+const char * CEmulationTab::RspGfxSetting()
+{
+	CButton gameProfile(m_Dlg.GetDlgItem(IDC_GAME_PROFILE));
+	const bool forGame = (gameProfile.GetStyle() & WS_VISIBLE) != 0 && gameProfile.GetCheck() == BST_CHECKED;
+	return forGame ? "HLE GFX" : "HLE GFX Plugin";
 }
 
 LRESULT CEmulationTab::OnScroll(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)

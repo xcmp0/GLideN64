@@ -33,6 +33,7 @@ public:
 
 private:
 	LRESULT OnScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/);
+	const char * RspGfxSetting();
 
 	CEdit m_GammaTxt, m_N64ResMultiplerTxt;
 	CUpDownCtrl m_GammaSpin, m_N64ResMultiplerSpin;

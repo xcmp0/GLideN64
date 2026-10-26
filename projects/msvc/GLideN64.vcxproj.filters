@@ -245,6 +245,9 @@
     <ClCompile Include="..\..\src\Graphics\OpenGLContext\GLSL\glsl_CombinerInputs.cpp">
       <Filter>Source Files\Graphics\OpenGL\GLSL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ZilmarSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\ZlutTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -618,6 +621,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Graphics\PixelBuffer.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ZilmarSettings.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ZlutTexture.h">
       <Filter>Header Files</Filter>

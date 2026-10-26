@@ -277,6 +277,7 @@ else(MUPENPLUSAPI)
   include_directories( . inc )
   set(GLideN64_SOURCES_WIN
 	ZilmarPluginAPI.cpp
+	ZilmarSettings.cpp
 	GLideNUI/Config_GLideNUI.cpp
 	windows/CommonAPIImpl_windows.cpp
 	windows/GLideN64_windows.cpp

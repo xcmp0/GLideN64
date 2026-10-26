@@ -120,6 +120,8 @@ enum languageStringID
 	EMULATION_STRIPPED = 3032,
 	EMULATION_PIXEL_COVERAGE = 3033,
 	EMULATION_PIXEL_COVERAGE_TOOLTIP = 3034,
+	EMULATION_RSP_HLE_GFX = 3035,
+	EMULATION_RSP_HLE_GFX_TOOLTIP = 3036,
 
 	/*********************************************************************************
 	* Frame Buffer Tab															   *
